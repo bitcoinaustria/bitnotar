@@ -39,6 +39,7 @@ def verify_fn(fn, service):
   csum = sha256sum(fn)
   print "Checksum: %s" % csum
   keys = get_keys(csum)
+  print 'pub_key: %s, priv_key: %s' % (keys[0], keys[1])
   # does keys[0] exist?
   return verify(keys[0], service)
 
@@ -55,8 +56,7 @@ def verify(pubkey, service):
       # get min block height of all transactoins:
       bh = min(_["block_height"] for _ in data["txs"])
       q2 = urllib2.urlopen("http://blockchain.info/rawblock/%s?format=json" % bh)
-      data2 = json.loads(q2.read())
-      ts = data2["time"]
+      ts = json.loads(q2.read())["time"]
       from datetime import datetime
       ts = datetime.utcfromtimestamp(ts)
       return True, ts.isoformat()

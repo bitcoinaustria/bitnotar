@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Sha 256 of a file</title>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.0.2/build/rollups/sha256.js"></script>
+</head>
+<body>
+
+<input type="file" id="files" name="files[]" multiple />
+<div id="output"></div>
+
+<script>
+function sha256(data) {
+    var hash = CryptoJS.SHA256(data);
+    return hash.toString(CryptoJS.enc.Hex);
+}
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // files is a FileList of File objects. List some properties.
+    var output = document.querySelector("#output");
+    for (var i = 0, f; f = files[i]; i++) {
+      var reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          var hashsum = sha256(e.target.result);
+          output.innerHTML = 'SHA256: ' + hashsum + '</li>';
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsBinaryString(f);
+    }
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
+
+</body>
+</html>
