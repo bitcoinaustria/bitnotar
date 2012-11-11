@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.widget.ArrayAdapter;
 import com.google.common.io.InputSupplier;
 
+import javax.annotation.Nullable;
+
 public class BitnotarActivity extends Activity {
 
     public static final int REQUEST_CODE = 999;
@@ -70,7 +72,7 @@ public class BitnotarActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
        if (resultCode == REQUEST_CODE){
            String txHash = data.getStringExtra("transaction_hash");
            //todo modify new list item

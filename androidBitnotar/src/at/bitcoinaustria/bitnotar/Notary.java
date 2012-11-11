@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import com.google.bitcoin.core.Address;
-import com.google.bitcoin.core.ECKey;
-import com.google.bitcoin.core.NetworkParameters;
+import com.google.bitcoin.core.*;
 import com.google.common.base.Preconditions;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
@@ -17,6 +15,7 @@ import com.google.common.io.InputSupplier;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.util.Arrays;
 
 /**
  * @author apetersson
@@ -24,6 +23,7 @@ import java.math.BigInteger;
 public class Notary extends AsyncTask<InputSupplier<InputStream>, Long, Intent> {
 
     private static final NetworkParameters NETWORK = NetworkParameters.prodNet();
+    public static final String TAG = "BITNOTAR";
 
     @Override
     protected Intent doInBackground(final InputSupplier<InputStream>... params) {
@@ -36,11 +36,14 @@ public class Notary extends AsyncTask<InputSupplier<InputStream>, Long, Intent> 
         };
         try {
             HashCode hash = ByteStreams.hash(inputSupplier, Hashing.sha256());
-            ECKey privateKey = new ECKey(new BigInteger(hash.asBytes()));
+            byte[] value = hash.asBytes();
+            BigInteger privKey = new BigInteger(hash.toString(),16);
+            ECKey privateKey = new ECKey(privKey);
+            Log.d(TAG, "key" + privateKey.toStringWithPrivate());
             Address address = privateKey.toAddress(NETWORK);
             String uri = "bitcoin:" + address;
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            Log.i("BITNOTAR", "forwarding to bitcoin uri: " + uri);
+            Log.i(TAG, "forwarding to bitcoin uri: " + uri);
             return i;
         } catch (IOException e) {
             throw new RuntimeException(e);

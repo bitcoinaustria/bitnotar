@@ -6,6 +6,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/libsrc/guava-13.0.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/bliver/app/libs-src/bitcoinj-0.6-sources.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/libs" recursive="false" />
   </library>
