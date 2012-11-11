@@ -1,5 +1,6 @@
 package at.bitcoinaustria.bitnotar;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import android.net.Uri;
@@ -12,8 +13,11 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
+import com.google.common.io.InputSupplier;
 
 public class BitnotarActivity extends Activity {
+
+    public static final int REQUEST_CODE = 999;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +26,7 @@ public class BitnotarActivity extends Activity {
 
 
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        final Bundle extras = intent.getExtras();
         String action = intent.getAction();
 
         // if this is from the share menu
@@ -32,13 +36,22 @@ public class BitnotarActivity extends Activity {
             {
                 try
                 {
-
-                    Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
-                    ContentResolver cr = getContentResolver();
-                    InputStream is = cr.openInputStream(uri);
-                    
-                    
-                    //new Notary().execute(is);
+                    //noinspection unchecked
+                    new Notary(){
+                        @Override
+                        protected void onPostExecute(Intent intent) {
+                            //todo create new List item for new Signer
+                            startActivityForResult(intent, REQUEST_CODE);
+                        }
+                    }.execute(new InputSupplier<InputStream>() {
+                        @Override
+                        public InputStream getInput() throws IOException {
+                            Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
+                            ContentResolver cr = getContentResolver();
+                            InputStream is = cr.openInputStream(uri);
+                            return is;
+                        }
+                    });
                    
 
 
@@ -51,9 +64,17 @@ public class BitnotarActivity extends Activity {
 
             } else if (extras.containsKey(Intent.EXTRA_TEXT))
             {
-                return;
+                //
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       if (resultCode == REQUEST_CODE){
+           String txHash = data.getStringExtra("transaction_hash");
+           //todo modify new list item
+       }
     }
 
     @Override
