@@ -24,6 +24,8 @@ import java.math.BigInteger;
 public class Notary extends AsyncTask<InputSupplier<InputStream>, Long, Intent> {
 
     private static final NetworkParameters NETWORK = NetworkParameters.prodNet();
+    public static final String TAG = "BITNOTAR";
+    public static final String DEFAULT_AMOUT = "0.01";
 
     @Override
     protected Intent doInBackground(final InputSupplier<InputStream>... params) {
@@ -36,11 +38,14 @@ public class Notary extends AsyncTask<InputSupplier<InputStream>, Long, Intent> 
         };
         try {
             HashCode hash = ByteStreams.hash(inputSupplier, Hashing.sha256());
-            ECKey privateKey = new ECKey(new BigInteger(hash.asBytes()));
+            byte[] value = hash.asBytes();
+            BigInteger privKey = new BigInteger(hash.toString(), 16);
+            ECKey privateKey = new ECKey(privKey);
+            Log.d(TAG, "key" + privateKey.toStringWithPrivate());
             Address address = privateKey.toAddress(NETWORK);
-            String uri = "bitcoin:" + address;
+            String uri = "bitcoin:" + address + "?amount=" + DEFAULT_AMOUT;
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-            Log.i("BITNOTAR", "forwarding to bitcoin uri: " + uri);
+            Log.i(TAG, "forwarding to bitcoin uri: " + uri);
             return i;
         } catch (IOException e) {
             throw new RuntimeException(e);
