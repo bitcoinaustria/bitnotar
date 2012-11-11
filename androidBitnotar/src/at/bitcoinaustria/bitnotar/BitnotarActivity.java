@@ -1,5 +1,6 @@
 package at.bitcoinaustria.bitnotar;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ArrayAdapter;
+import com.google.common.io.InputSupplier;
 
 public class BitnotarActivity extends Activity {
 
@@ -22,7 +24,7 @@ public class BitnotarActivity extends Activity {
 
 
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        final Bundle extras = intent.getExtras();
         String action = intent.getAction();
 
         // if this is from the share menu
@@ -32,13 +34,21 @@ public class BitnotarActivity extends Activity {
             {
                 try
                 {
-
-                    Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
-                    ContentResolver cr = getContentResolver();
-                    InputStream is = cr.openInputStream(uri);
-                    
-                    
-                    //new Notary().execute(is);
+                    //noinspection unchecked
+                    new Notary(){
+                        @Override
+                        protected void onPostExecute(Intent intent) {
+                            startActivity(intent);
+                        }
+                    }.execute(new InputSupplier<InputStream>() {
+                        @Override
+                        public InputStream getInput() throws IOException {
+                            Uri uri = (Uri) extras.getParcelable(Intent.EXTRA_STREAM);
+                            ContentResolver cr = getContentResolver();
+                            InputStream is = cr.openInputStream(uri);
+                            return is;
+                        }
+                    });
                    
 
 
