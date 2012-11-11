@@ -27,7 +27,7 @@ public class NotaryTest extends AndroidTestCase{
             }
         });
         Intent intent = notary.get();
-        assertEquals("bitcoin:14pni5ZHty86QP6oFT4vPkp1wMMFBpN1eY", intent.getData().toString());
+        assertEquals("bitcoin:14pni5ZHty86QP6oFT4vPkp1wMMFBpN1eY?amount=0.01", intent.getData().toString());
     }
 
 
