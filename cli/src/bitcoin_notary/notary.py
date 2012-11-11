@@ -53,23 +53,26 @@ def verify(addr, service = verify_services[0]):
   '''
   print "Checking %s" % addr
   if service == "blockchain":
-    import urllib2, json
-    q = urllib2.urlopen("http://blockchain.info/address/%s?format=json" % addr)
-    data = json.loads(q.read())
-    if data['total_received'] > 0:
-      # get min block height of all transactoins:
-      ts = min(_["time"] for _ in data["txs"])
-      #q2 = urllib2.urlopen("http://blockchain.info/rawblock/%s?format=json" % bh)
-      #d2 = json.loads(q2.read())
-      #print str(d2)[:1000]
-      print "timestamp: %s" % ts
-      from datetime import datetime
-      ts = datetime.utcfromtimestamp(ts)
-      return True, ts.isoformat(), addr
-    return False, None, addr
+    try:
+      import urllib2, json
+      q = urllib2.urlopen("http://blockchain.info/address/%s?format=json" % addr)
+      data = json.loads(q.read())
+      if data['total_received'] > 0:
+        # get min block height of all transactoins:
+        ts = min(_["time"] for _ in data["txs"])
+        #q2 = urllib2.urlopen("http://blockchain.info/rawblock/%s?format=json" % bh)
+        #d2 = json.loads(q2.read())
+        #print str(d2)[:1000]
+        print "timestamp: %s" % ts
+        from datetime import datetime
+        ts = datetime.utcfromtimestamp(ts)
+        return True, ts.isoformat(), addr
+      return False, None, addr
+    except:
+      return False, None, addr
   else:
     print "Service %s not supported." % service
-    return False
+    return False, None, addr
 
 def testify(data):
   '''

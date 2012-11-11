@@ -4,10 +4,10 @@
 from flask import Flask
 app = Flask(__name__)
 
-@app.route("/verify/<cs>")
-def verify(cs):
-  from notary import verify_cs
-  t, ts, addr = verify_cs(cs)
+@app.route("/verify/<addr>")
+def verify(addr):
+  from notary import verify
+  t, ts, addr = verify(addr)
   if t:
     res = "Success: %s for address <a href='https://blockchain.info/address/%s'>%s</a>" % (ts, addr, addr)
   else:
