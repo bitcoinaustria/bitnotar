@@ -10,10 +10,14 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+         android:name=".State">
         
+        <activity android:name=".BitDocumentDetailActivity"
+                  android:label="@string/detail"
+            />
         <activity
-            android:name=".BitDocumentListActivity"
+            android:name=".BitnotarActivity"
             android:label="@string/title_bitdocument_list" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,24 +35,6 @@
                 <data android:mimeType="video/*" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".BitDocumentDetailActivity"
-            android:label="@string/title_bitdocument_detail" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BitDocumentListActivity" />
-        </activity>
-        
-        <activity
-            android:name=".BitnotarActivity"
-            android:label="@string/title_activity_bitnotar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
-
     </application>
 
 </manifest>

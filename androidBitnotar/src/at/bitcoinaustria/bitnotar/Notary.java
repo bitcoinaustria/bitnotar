@@ -45,6 +45,7 @@ public class Notary extends AsyncTask<InputSupplier<InputStream>, Long, Intent> 
             Address address = privateKey.toAddress(NETWORK);
             String uri = "bitcoin:" + address + "?amount=" + DEFAULT_AMOUT;
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            i.putExtra(State.HASH_PARAM,address.toString());
             Log.i(TAG, "forwarding to bitcoin uri: " + uri);
             return i;
         } catch (IOException e) {
