@@ -39,12 +39,12 @@ if __name__ == "__main__":
     notary.testify(config.testify)
 
   if config.address:
-    test, timestamp = notary.verify(config.address, service = config.service)
-    print test, timestamp
+    test, timestamp, addr = notary.verify(config.address, service = config.service)
+    print test, timestamp, addr
 
   if config.verify:
-    test, timestamp = notary.verify_fn(config.verify, service = config.service)
+    test, timestamp, addr = notary.verify_fn(config.verify, service = config.service)
     if test:
-      print "I could verify that the given file existed at %s " % timestamp
+      print "I could verify that the given file existed at %s (addr: %s)" % (timestamp, addr)
     else:
       print "Could not verify existance :("
