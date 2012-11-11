@@ -1,0 +1,3 @@
+[submodule "cli/src/bitcoin_notary/pywallet"]
+	path = cli/src/bitcoin_notary/pywallet
+	url = git://github.com/jackjack-jj/pywallet.git

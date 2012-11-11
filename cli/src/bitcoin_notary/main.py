@@ -12,6 +12,7 @@ def _clargs():
   a given point in time using the Bitcoin blockchain, or it generates a Bitcoin address, where a small amount
   needs to be sent to in order to testify the existance of such a document.""",
   epilog = "Source: http://github.com/bitcoinaustria/bitnotar/")
+  parser.add_option('-a', '--address', dest = "address", help ="verify the given address directly", metavar = "BTC_ADDRESS")
   parser.add_option('-c', '--verify',  dest = "verify",  help = "verify this file", metavar = "FILE")
   parser.add_option('-t', '--testify', dest = "testify", help = "create a proof to testify that this file exists", metavar = "FILE")
   parser.add_option('-s', '--service', dest = "service", 
@@ -36,5 +37,14 @@ if __name__ == "__main__":
   import notary
   if config.testify:
     notary.testify(config.testify)
+
+  if config.address:
+    test, timestamp = notary.verify(config.address, service = config.service)
+    print test, timestamp
+
   if config.verify:
-    notary.verify(config.verify)
+    test, timestamp = notary.verify_fn(config.verify, service = config.service)
+    if test:
+      print "I could verify that the given file existed at %s " % timestamp
+    else:
+      print "Could not verify existance :("
