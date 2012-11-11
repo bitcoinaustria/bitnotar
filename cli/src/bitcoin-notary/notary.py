@@ -6,6 +6,8 @@ def sha256sum(data):
   '''
   return None
 
+verify_services = [ 'blockchain', 'local' ]
+
 def verify(hashsum):
   '''
   This function verifies the given ``hashsum``.
