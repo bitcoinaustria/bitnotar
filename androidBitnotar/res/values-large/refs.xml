@@ -1,0 +1,3 @@
+<resources>
+    <item type="layout" name="activity_bitdocument_list">@layout/activity_bitdocument_twopane</item>
+</resources>
