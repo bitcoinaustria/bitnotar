@@ -17,6 +17,8 @@ import com.google.common.io.InputSupplier;
 
 public class BitnotarActivity extends Activity {
 
+    public static final int REQUEST_CODE = 999;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +40,8 @@ public class BitnotarActivity extends Activity {
                     new Notary(){
                         @Override
                         protected void onPostExecute(Intent intent) {
-                            startActivity(intent);
+                            //todo create new List item for new Signer
+                            startActivityForResult(intent, REQUEST_CODE);
                         }
                     }.execute(new InputSupplier<InputStream>() {
                         @Override
@@ -61,9 +64,17 @@ public class BitnotarActivity extends Activity {
 
             } else if (extras.containsKey(Intent.EXTRA_TEXT))
             {
-                return;
+                //
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+       if (resultCode == REQUEST_CODE){
+           String txHash = data.getStringExtra("transaction_hash");
+           //todo modify new list item
+       }
     }
 
     @Override
