@@ -21,7 +21,7 @@ def _clargs():
   parser.add_option('-v', dest = "verbose", action = "store_true", help = "verbose")
   config, _ = parser.parse_args()
 
-  if config.verify is None and config.testify is None:
+  if config.verify is None and config.testify is None and config.address is None:
     parser.print_help()
     import sys; sys.exit(1)
 

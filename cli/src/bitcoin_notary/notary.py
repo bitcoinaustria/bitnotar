@@ -37,15 +37,15 @@ verify_services = [ 'blockchain', 'local' ]
 
 def verify_fn(fn, service):
   csum = sha256sum(fn)
-  return verify(csum, service)
+  print "Checksum: %s" % csum
+  keys = get_keys(csum)
+  # does keys[0] exist?
+  return verify(keys[0], service)
 
-def verify(hashsum, service):
+def verify(pubkey, service):
   '''
   This function verifies the given ``hashsum``.
   '''
-  keys = get_keys(hashsum)
-  # does keys[0] exist?
-  pubkey = keys[0]
   print "Checking %s" % pubkey
   if service == "blockchain":
     import urllib2, json
@@ -53,13 +53,13 @@ def verify(hashsum, service):
     data = json.loads(q.read())
     if data['total_received'] > 0:
       # get min block height of all transactoins:
-      tx_idx = min(data["txs"], key=lambda _ : _["block_height"])["tx_index"]
-      q2 = urllib2.urlopen("http://blockchain.info/tx-index/%s" % tx_idx)
+      bh = min(_["block_height"] for _ in data["txs"])
+      q2 = urllib2.urlopen("http://blockchain.info/rawblock/%s?format=json" % bh)
       data2 = json.loads(q2.read())
-      print data2
-      timestamp = data2
-
-      return True, timestamp
+      ts = data2["time"]
+      from datetime import datetime
+      ts = datetime.utcfromtimestamp(ts)
+      return True, ts.isoformat()
     return False, None
   else:
     print "Service %s not supported." % service
