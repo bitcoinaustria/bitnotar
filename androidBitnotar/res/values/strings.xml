@@ -4,5 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_bitnotar">Bitnotar</string>
+    <string name="title_bitdocument_list">Signed Documents</string>
+    <string name="title_bitdocument_detail">This Document</string>
+    <string name="hello">hello</string>
+    <string name="detail">Detail</string>
 
 </resources>
