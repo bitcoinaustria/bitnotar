@@ -33,10 +33,10 @@ has never been broken or hacked.
 Features
 --------
 
-The given application has to basic functions:
+The given application has (or should have) these two basic functions:
 
-1. *Testify*: Derive the public Bitcoin address and initiate a Bitcoin transaction.
-2. *Verify*: Derive the public Bitcoin address and look it up at a service like
+1. **Testify**: Derive the public Bitcoin address and initiate a Bitcoin transaction.
+2. **Verify**: Derive the public Bitcoin address and look it up at a service like
    [blockchain.info](http://blockchain.info) or [blockexplorer](http://blockexplorer.com).
    Return the associated time-stamp (and maybe also look up the time-stamps of the surrounding blocks
    to verify the time-stamp). Additionally, local lookup mechanisms could be implemented.
